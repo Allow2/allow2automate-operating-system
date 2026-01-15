@@ -1,0 +1,173 @@
+{
+  "name": "@allow2/allow2automate-operating-system",
+  "shortName": "operating-system",
+  "version": "1.0.0",
+  "description": "OS-level parental controls - monitor sessions, processes, browsers and enforce computer/internet time quotas",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "jsnext:main": "dist/index.es.js",
+  "scripts": {
+    "test": "jest",
+    "build": "rollup -c && npm run copy-scripts",
+    "copy-scripts": "mkdir -p dist/monitors dist/actions && cp -r src/monitors/*.js dist/monitors/ && cp -r src/actions/*.js dist/actions/",
+    "postinstall": "npm run remove-peer-deps || true",
+    "remove-peer-deps": "rm -rf node_modules/react node_modules/react-dom node_modules/@material-ui node_modules/react-is node_modules/react-transition-group node_modules/hoist-non-react-statics || true",
+    "start": "rollup -c -w",
+    "prepublish": "npm run build",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Allow2/allow2automate-operating-system"
+  },
+  "bugs": {
+    "url": "https://github.com/Allow2/allow2automate-operating-system/issues"
+  },
+  "homepage": "https://github.com/Allow2/allow2automate-operating-system#readme",
+  "keywords": [
+    "allow2automate",
+    "operating-system",
+    "parental-controls",
+    "screen-time",
+    "session-monitoring",
+    "process-monitoring",
+    "browser-detection",
+    "quota-enforcement",
+    "bedtime",
+    "plugin"
+  ],
+  "author": {
+    "name": "Allow2",
+    "url": "https://allow2.com"
+  },
+  "license": "MIT",
+  "allow2automate": {
+    "plugin": true,
+    "pluginId": "allow2automate-operating-system",
+    "displayName": "Operating System Controls",
+    "category": "System",
+    "permissions": [
+      "network",
+      "configuration",
+      "system"
+    ],
+    "requiresMainProcess": true,
+    "minAppVersion": "2.0.0",
+    "api": {
+      "actions": [
+        {
+          "id": "enableOSMonitoring",
+          "name": "Enable OS Monitoring",
+          "description": "Start monitoring OS sessions and processes"
+        },
+        {
+          "id": "getUsageReport",
+          "name": "Get Usage Report",
+          "description": "Get computer and internet time usage for a child"
+        },
+        {
+          "id": "triggerFocusMode",
+          "name": "Trigger Focus Mode",
+          "description": "Enable/disable focus mode for distraction blocking"
+        },
+        {
+          "id": "logoutUser",
+          "name": "Logout User",
+          "description": "Force logout the current user"
+        },
+        {
+          "id": "lockSession",
+          "name": "Lock Session",
+          "description": "Lock the current session"
+        }
+      ],
+      "triggers": [
+        {
+          "id": "quotaWarning",
+          "name": "Quota Warning",
+          "description": "Triggered when approaching quota limit"
+        },
+        {
+          "id": "quotaExhausted",
+          "name": "Quota Exhausted",
+          "description": "Triggered when quota is fully used"
+        },
+        {
+          "id": "bedtimeWarning",
+          "name": "Bedtime Warning",
+          "description": "Triggered when approaching bedtime"
+        },
+        {
+          "id": "bedtimeReached",
+          "name": "Bedtime Reached",
+          "description": "Triggered when bedtime is reached"
+        },
+        {
+          "id": "sessionStarted",
+          "name": "Session Started",
+          "description": "Triggered when a child logs in"
+        },
+        {
+          "id": "sessionEnded",
+          "name": "Session Ended",
+          "description": "Triggered when a child logs out"
+        },
+        {
+          "id": "browserDetected",
+          "name": "Browser Detected",
+          "description": "Triggered when a browser is opened"
+        },
+        {
+          "id": "blockedProcessDetected",
+          "name": "Blocked Process Detected",
+          "description": "Triggered when a blocked application is launched"
+        }
+      ]
+    }
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.13.9"
+  },
+  "peerDependencies": {
+    "@material-ui/core": "^4.0.0",
+    "@material-ui/icons": "^4.0.0",
+    "@material-ui/lab": "^4.0.0",
+    "react": "^16.0.0 || ^17.0.0",
+    "react-dom": "^16.0.0 || ^17.0.0"
+  },
+  "files": [
+    "dist",
+    "img"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.13.8",
+    "@babel/plugin-external-helpers": "^7.12.13",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-proposal-decorators": "^7.0.0",
+    "@babel/plugin-proposal-do-expressions": "^7.0.0",
+    "@babel/plugin-proposal-export-default-from": "^7.0.0",
+    "@babel/plugin-proposal-export-namespace-from": "^7.0.0",
+    "@babel/plugin-proposal-function-bind": "^7.0.0",
+    "@babel/plugin-proposal-function-sent": "^7.0.0",
+    "@babel/plugin-proposal-json-strings": "^7.0.0",
+    "@babel/plugin-proposal-logical-assignment-operators": "^7.0.0",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.0.0",
+    "@babel/plugin-proposal-numeric-separator": "^7.0.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.0.0",
+    "@babel/plugin-proposal-pipeline-operator": "^7.0.0",
+    "@babel/plugin-proposal-throw-expressions": "^7.0.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/plugin-syntax-import-meta": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.13.9",
+    "@babel/preset-env": "^7.13.9",
+    "@babel/preset-react": "^7.12.13",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-commonjs": "^17.1.0",
+    "@rollup/plugin-node-resolve": "^11.2.0",
+    "jest": "^27.0.0",
+    "rollup": "^2.40.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.0"
+  }
+}

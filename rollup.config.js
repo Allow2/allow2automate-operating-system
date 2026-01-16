@@ -31,7 +31,9 @@ export default {
             exclude: 'node_modules/**',
             babelHelpers: 'runtime'
         }),
-        resolve(),
+        resolve({
+            extensions: ['.js', '.jsx', '.json']
+        }),
         commonjs()
     ],
     external: ['fs', 'path', 'os', 'electron', 'child_process', 'util', 'events']

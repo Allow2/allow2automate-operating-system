@@ -57,7 +57,8 @@ import {
     Warning as WarningIcon
 } from '@material-ui/icons';
 
-const { ipcRenderer } = window.require('electron');
+// Use props.ipc which has auto-prefixed channels, fallback to global for compatibility
+// The host app passes ipc/ipcRenderer props with channels prefixed by plugin name
 
 class TabContent extends Component {
     constructor(props) {
@@ -87,19 +88,19 @@ class TabContent extends Component {
         await this.loadData();
 
         // Setup event listeners
-        ipcRenderer.on('osViolation', (event, data) => {
+        this.props.ipc.on('osViolation', (event, data) => {
             this.handleViolation(data);
         });
 
-        ipcRenderer.on('osSessionUpdate', (event, data) => {
+        this.props.ipc.on('osSessionUpdate', (event, data) => {
             this.handleSessionUpdate(data);
         });
 
-        ipcRenderer.on('osQuotaWarning', (event, data) => {
+        this.props.ipc.on('osQuotaWarning', (event, data) => {
             this.handleQuotaWarning(data);
         });
 
-        ipcRenderer.on('osQuotaExhausted', (event, data) => {
+        this.props.ipc.on('osQuotaExhausted', (event, data) => {
             this.handleQuotaExhausted(data);
         });
 
@@ -114,10 +115,10 @@ class TabContent extends Component {
             clearInterval(this.refreshInterval);
         }
 
-        ipcRenderer.removeAllListeners('osViolation');
-        ipcRenderer.removeAllListeners('osSessionUpdate');
-        ipcRenderer.removeAllListeners('osQuotaWarning');
-        ipcRenderer.removeAllListeners('osQuotaExhausted');
+        this.props.ipc.removeAllListeners && this.props.ipc.removeAllListeners('osViolation');
+        this.props.ipc.removeAllListeners && this.props.ipc.removeAllListeners('osSessionUpdate');
+        this.props.ipc.removeAllListeners && this.props.ipc.removeAllListeners('osQuotaWarning');
+        this.props.ipc.removeAllListeners && this.props.ipc.removeAllListeners('osQuotaExhausted');
     }
 
     async loadData(showLoading = true) {
@@ -127,23 +128,23 @@ class TabContent extends Component {
 
         try {
             // Get status
-            const [statusError, statusResult] = await ipcRenderer.invoke('os:getStatus');
+            const [statusError, statusResult] = await this.props.ipc.invoke('os:getStatus');
             if (statusError) throw statusError;
 
             // Get agents
-            const [agentsError, agentsResult] = await ipcRenderer.invoke('os:getAgents');
+            const [agentsError, agentsResult] = await this.props.ipc.invoke('os:getAgents');
             if (agentsError) throw agentsError;
 
             // Get violations
-            const [violationsError, violationsResult] = await ipcRenderer.invoke('os:getViolations', { limit: 50 });
+            const [violationsError, violationsResult] = await this.props.ipc.invoke('os:getViolations', { limit: 50 });
             if (violationsError) throw violationsError;
 
             // Get activity log
-            const [activitiesError, activitiesResult] = await ipcRenderer.invoke('os:getActivityLog', { limit: 50 });
+            const [activitiesError, activitiesResult] = await this.props.ipc.invoke('os:getActivityLog', { limit: 50 });
             if (activitiesError) throw activitiesError;
 
             // Get settings
-            const [settingsError, settingsResult] = await ipcRenderer.invoke('os:getSettings');
+            const [settingsError, settingsResult] = await this.props.ipc.invoke('os:getSettings');
             if (settingsError) throw settingsError;
 
             this.setState({
@@ -186,7 +187,7 @@ class TabContent extends Component {
 
     async handleLinkAgent(agentId, childId) {
         try {
-            const [error] = await ipcRenderer.invoke('os:linkAgent', { agentId, childId });
+            const [error] = await this.props.ipc.invoke('os:linkAgent', { agentId, childId });
             if (error) throw error;
 
             await this.loadData(false);
@@ -198,7 +199,7 @@ class TabContent extends Component {
 
     async handleUnlinkAgent(agentId) {
         try {
-            const [error] = await ipcRenderer.invoke('os:unlinkAgent', { agentId });
+            const [error] = await this.props.ipc.invoke('os:unlinkAgent', { agentId });
             if (error) throw error;
 
             await this.loadData(false);
@@ -210,7 +211,7 @@ class TabContent extends Component {
 
     async handleUpdateSettings(newSettings) {
         try {
-            const [error] = await ipcRenderer.invoke('os:updateSettings', { settings: newSettings });
+            const [error] = await this.props.ipc.invoke('os:updateSettings', { settings: newSettings });
             if (error) throw error;
 
             this.setState({ settings: { ...this.state.settings, ...newSettings } });
@@ -222,7 +223,7 @@ class TabContent extends Component {
 
     async handleForceLogout(agentId) {
         try {
-            const [error] = await ipcRenderer.invoke('os:forceLogout', { agentId });
+            const [error] = await this.props.ipc.invoke('os:forceLogout', { agentId });
             if (error) throw error;
         } catch (error) {
             console.error('[OS Settings] Error forcing logout:', error);
@@ -232,7 +233,7 @@ class TabContent extends Component {
 
     async handleLockSession(agentId) {
         try {
-            const [error] = await ipcRenderer.invoke('os:lockSession', { agentId });
+            const [error] = await this.props.ipc.invoke('os:lockSession', { agentId });
             if (error) throw error;
         } catch (error) {
             console.error('[OS Settings] Error locking session:', error);
@@ -242,7 +243,7 @@ class TabContent extends Component {
 
     async handleClearViolations() {
         try {
-            const [error] = await ipcRenderer.invoke('os:clearViolations');
+            const [error] = await this.props.ipc.invoke('os:clearViolations');
             if (error) throw error;
 
             this.setState({ violations: [] });

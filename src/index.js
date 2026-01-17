@@ -95,13 +95,18 @@ function plugin(context) {
 
         // Get agent service from context
         agentService = context.services?.agent;
+
+        // Setup IPC handlers FIRST - renderer communication must work regardless of agent service
+        setupIPCHandlers();
+
         if (!agentService) {
-            console.error('[OS Plugin] Agent service not available - plugin will not function');
+            console.error('[OS Plugin] Agent service not available - agent features will not function');
             statusUpdate({
-                status: 'error',
-                message: 'Agent service not available',
+                status: 'warning',
+                message: 'Agent service not available - limited functionality',
                 timestamp: Date.now()
             });
+            // IPC handlers are registered above, plugin can still provide status
             return;
         }
 
@@ -116,9 +121,6 @@ function plugin(context) {
 
             // Setup event listeners
             setupEventListeners();
-
-            // Setup IPC handlers for renderer communication
-            setupIPCHandlers();
 
             console.log('[OS Plugin] Loaded successfully');
             statusUpdate({
@@ -658,6 +660,19 @@ function plugin(context) {
         // Get current status
         ipcMain.handle('os:getStatus', async () => {
             try {
+                if (!agentService) {
+                    // Return limited status when agent service unavailable
+                    return [null, {
+                        agentCount: 0,
+                        activeAgents: 0,
+                        monitoredChildren: 0,
+                        agents: [],
+                        recentViolations: state.violations.slice(0, 10),
+                        settings: state.settings,
+                        lastSync: state.lastSync,
+                        serviceUnavailable: true
+                    }];
+                }
                 const agents = await agentService.listAgents();
                 const onlineAgents = agents.filter(a => a.online);
                 const monitoredChildren = Object.values(state.agents).filter(a => a.childId).length;
@@ -686,6 +701,9 @@ function plugin(context) {
         // Get agents
         ipcMain.handle('os:getAgents', async () => {
             try {
+                if (!agentService) {
+                    return [null, { agents: [], serviceUnavailable: true }];
+                }
                 const agents = await agentService.listAgents();
                 return [null, {
                     agents: agents.map(a => ({

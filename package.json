@@ -3,6 +3,7 @@
   "shortName": "operating-system",
   "version": "1.0.0",
   "description": "OS-level parental controls - monitor sessions, processes, browsers and enforce computer/internet time quotas",
+  "allow2Token": "vzN0BcBGl8akPKEv",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
@@ -60,26 +61,31 @@
           "id": "enableOSMonitoring",
           "name": "Enable OS Monitoring",
           "description": "Start monitoring OS sessions and processes"
+  "allow2Token": "vzN0BcBGl8akPKEv",
         },
         {
           "id": "getUsageReport",
           "name": "Get Usage Report",
           "description": "Get computer and internet time usage for a child"
+  "allow2Token": "vzN0BcBGl8akPKEv",
         },
         {
           "id": "triggerFocusMode",
           "name": "Trigger Focus Mode",
           "description": "Enable/disable focus mode for distraction blocking"
+  "allow2Token": "vzN0BcBGl8akPKEv",
         },
         {
           "id": "logoutUser",
           "name": "Logout User",
           "description": "Force logout the current user"
+  "allow2Token": "vzN0BcBGl8akPKEv",
         },
         {
           "id": "lockSession",
           "name": "Lock Session",
           "description": "Lock the current session"
+  "allow2Token": "vzN0BcBGl8akPKEv",
         }
       ],
       "triggers": [
@@ -87,41 +93,49 @@
           "id": "quotaWarning",
           "name": "Quota Warning",
           "description": "Triggered when approaching quota limit"
+  "allow2Token": "vzN0BcBGl8akPKEv",
         },
         {
           "id": "quotaExhausted",
           "name": "Quota Exhausted",
           "description": "Triggered when quota is fully used"
+  "allow2Token": "vzN0BcBGl8akPKEv",
         },
         {
           "id": "bedtimeWarning",
           "name": "Bedtime Warning",
           "description": "Triggered when approaching bedtime"
+  "allow2Token": "vzN0BcBGl8akPKEv",
         },
         {
           "id": "bedtimeReached",
           "name": "Bedtime Reached",
           "description": "Triggered when bedtime is reached"
+  "allow2Token": "vzN0BcBGl8akPKEv",
         },
         {
           "id": "sessionStarted",
           "name": "Session Started",
           "description": "Triggered when a child logs in"
+  "allow2Token": "vzN0BcBGl8akPKEv",
         },
         {
           "id": "sessionEnded",
           "name": "Session Ended",
           "description": "Triggered when a child logs out"
+  "allow2Token": "vzN0BcBGl8akPKEv",
         },
         {
           "id": "browserDetected",
           "name": "Browser Detected",
           "description": "Triggered when a browser is opened"
+  "allow2Token": "vzN0BcBGl8akPKEv",
         },
         {
           "id": "blockedProcessDetected",
           "name": "Blocked Process Detected",
           "description": "Triggered when a blocked application is launched"
+  "allow2Token": "vzN0BcBGl8akPKEv",
         }
       ]
     }
